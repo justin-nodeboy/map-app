@@ -34,7 +34,7 @@ onMounted(async() => {
     }
   });
 
-  locationData.value = await fetch("https://justin-nodeboy.github.io/map-app/assets/locations.json").then(res => res.json());
+  locationData.value = await fetch("https://map.bluebillboard.co.uk/assets/locations.json").then(res => res.json());
   processLocationData();
 
   setTimeout(function () {
