@@ -1750,4 +1750,44 @@
   "openOohParent": 4,
   "openOohChild": 401,
   "image": "BodyHappy.jpeg"
-}]
+},
+  {
+    "_id": {
+      "$oid": "46"
+    },
+    "name": "Guild Care Crawley",
+    "address": {
+      "address1": "48 The Broadway",
+      "address2": "",
+      "address3": "Crawley",
+      "postcode": "RH10 1HG",
+      "county": "West Sussex",
+      "country": "United Kingdom"
+    },
+    "description": "This is a brand new retail unit for Guild Care right in the heart of Crawley town centre.",
+    "locationType": null,
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        -0.18834734753451,
+        51.114766214391
+      ]
+    },
+    "adSpaceId": "5fcd0a38f6075d000a236e82",
+    "languages": [
+      "English"
+    ],
+    "live": true,
+    "programmaticDesired": true,
+    "isMobile": null,
+    "geoFence": null,
+    "mapCenter": null,
+    "hasInventory": true,
+    "hasAdmInventory": true,
+    "countInventory": 1,
+    "countAdmInventory": 1,
+    "averageFootfall": 70581,
+    "openOohParent": 4,
+    "openOohChild": 401,
+    "image": "GCCrawley.jpeg"
+  }]
