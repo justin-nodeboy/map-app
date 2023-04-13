@@ -855,45 +855,6 @@
   "image": "Broadwater.jpeg"
 },{
   "_id": {
-    "$oid": "61b4c97ca15ab9de827ab2be"
-  },
-  "name": "Guild Care Goring",
-  "address": {
-    "address1": "10 Goring Road",
-    "address2": "Goring-by-Sea",
-    "address3": null,
-    "postcode": "BN12 4AJ",
-    "county": "West Sussex",
-    "country": "United Kingdom"
-  },
-  "description": "## Goring Road Charity Shop\n\nOne of our longest established shops situated in the popular and busy Goring Road shopping area. Goring Road has a wide variety of bric-a-brac, toys, clothes and books for sale. ",
-  "locationType": "Retail",
-  "location": {
-    "type": "Point",
-    "coordinates": [
-      -0.4010378,
-      50.8138908
-    ]
-  },
-  "adSpaceId": "5fcd0a38f6075d000a236e82",
-  "languages": [
-    "English"
-  ],
-  "live": true,
-  "programmaticDesired": true,
-  "isMobile": null,
-  "geoFence": null,
-  "mapCenter": null,
-  "hasInventory": true,
-  "hasAdmInventory": true,
-  "countInventory": 1,
-  "countAdmInventory": 1,
-  "averageFootfall": 0,
-  "openOohParent": 2,
-  "openOohChild": 205,
-  "image": "GoringGC.jpeg"
-},{
-  "_id": {
     "$oid": "61b4cacba15ab9de827ab2c1"
   },
   "name": "Guild Care Rowlands Road",
