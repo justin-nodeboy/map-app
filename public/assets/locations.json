@@ -1751,4 +1751,44 @@
     "openOohParent": 4,
     "openOohChild": 401,
     "image": "GCCrawley.jpeg"
+  },
+  {
+    "_id": {
+      "$oid": "47"
+    },
+    "name": "Guildbourne Centre",
+    "address": {
+      "address1": "The Guildbourne Centre",
+      "address2": "",
+      "address3": "Worthing",
+      "postcode": "BN11 1LZ",
+      "county": "West Sussex",
+      "country": "United Kingdom"
+    },
+    "description": "Worthings only town centre shopping mall. With a variety of local and national businesses in side and high footfall. This is a fantastic location to boost your business.",
+    "locationType": null,
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        -0.36933677325337666,
+        50.81270624933763
+      ]
+    },
+    "adSpaceId": "5fcd0a38f6075d000a236e82",
+    "languages": [
+      "English"
+    ],
+    "live": true,
+    "programmaticDesired": true,
+    "isMobile": null,
+    "geoFence": null,
+    "mapCenter": null,
+    "hasInventory": true,
+    "hasAdmInventory": true,
+    "countInventory": 1,
+    "countAdmInventory": 1,
+    "averageFootfall": 70581,
+    "openOohParent": 4,
+    "openOohChild": 401,
+    "image": "GBC.JPG"
   }]
