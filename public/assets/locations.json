@@ -1791,4 +1791,44 @@
     "openOohParent": 4,
     "openOohChild": 401,
     "image": "GBC.JPG"
+  },
+  {
+    "_id": {
+      "$oid": "48"
+    },
+    "name": "Guild Care Hove",
+    "address": {
+      "address1": "Guild Care Hove",
+      "address2": "93-94 George St",
+      "address3": "Hove",
+      "postcode": "BN3 3YE",
+      "county": "East Sussex",
+      "country": "United Kingdom"
+    },
+    "description": "We are excited to confirm that a new Guild Care charity shop is now open in Hove! We sell an exciting range of high quality goods such as clothing, accessories, toys, bric-a-brac, homeware, books, DVD's and more. Visit us today to shop or donate.",
+    "locationType": null,
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        -0.17385997320797458,
+        50.82915202758255
+      ]
+    },
+    "adSpaceId": "5fcd0a38f6075d000a236e82",
+    "languages": [
+      "English"
+    ],
+    "live": true,
+    "programmaticDesired": true,
+    "isMobile": null,
+    "geoFence": null,
+    "mapCenter": null,
+    "hasInventory": true,
+    "hasAdmInventory": true,
+    "countInventory": 1,
+    "countAdmInventory": 1,
+    "averageFootfall": 70581,
+    "openOohParent": 4,
+    "openOohChild": 401,
+    "image": "GCHove.JPG"
   }]
