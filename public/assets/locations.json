@@ -1831,4 +1831,44 @@
     "openOohParent": 4,
     "openOohChild": 401,
     "image": "GCHove.jpeg"
+  },
+  {
+    "_id": {
+      "$oid": "49"
+    },
+    "name": "Guild Care Horsham",
+    "address": {
+      "address1": "Guild Care Horsham",
+      "address2": "44 West Street",
+      "address3": "Horsham",
+      "postcode": "RH12 1PP",
+      "county": "West Sussex",
+      "country": "United Kingdom"
+    },
+    "description": "We are excited to confirm that a new Guild Care charity shop is now open in Horsham! We sell an exciting range of high quality goods such as clothing, accessories, toys, bric-a-brac, homeware, books, DVD's and more. Visit us today to shop or donate.",
+    "locationType": null,
+    "location": {
+      "type": "Point",
+      "coordinates": [
+        -0.331778,
+        51.063269
+      ]
+    },
+    "adSpaceId": "5fcd0a38f6075d000a236e82",
+    "languages": [
+      "English"
+    ],
+    "live": true,
+    "programmaticDesired": true,
+    "isMobile": null,
+    "geoFence": null,
+    "mapCenter": null,
+    "hasInventory": true,
+    "hasAdmInventory": true,
+    "countInventory": 1,
+    "countAdmInventory": 1,
+    "averageFootfall": 70581,
+    "openOohParent": 4,
+    "openOohChild": 401,
+    "image": "GCHorsham.jpeg"
   }]

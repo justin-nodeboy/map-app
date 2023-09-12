@@ -8,10 +8,11 @@ import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { marked } from 'marked';
 
 const open = ref(false);
+const listOpen = ref(false);
 const openImage = ref(false);
 const map = ref();
 const markerGroup = ref();
-const locationData = ref([]);
+const locationData = ref<any[]>([]);
 const meta = ref();
 const activeImage = ref();
 
@@ -71,6 +72,52 @@ const showImageModal = (img: string) => {
 
 <template>
   <div class="flex h-screen">
+    <TransitionRoot as="template" :show="listOpen">
+      <Dialog as="div" class="relative z-20">
+        <div class="fixed inset-0" />
+
+        <div class="fixed inset-0 overflow-hidden">
+          <div class="absolute inset-0 overflow-hidden">
+            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+              <TransitionChild as="template" enter="transform transition ease-in-out duration-500 sm:duration-700" enter-from="translate-x-full" enter-to="translate-x-0" leave="transform transition ease-in-out duration-500 sm:duration-700" leave-from="translate-x-0" leave-to="translate-x-full">
+                <DialogPanel class="pointer-events-auto w-screen max-w-3xl">
+                  <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                    <div class="bg-[#0d47a1] py-6 px-4 sm:px-6">
+                      <div class="flex items-center justify-between">
+                        <DialogTitle class="text-lg font-medium text-white">All Locations</DialogTitle>
+                        <div class="ml-3 flex h-7 items-center">
+                          <button type="button" class="rounded-md bg-[#0d47a1] text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-white" @click="listOpen = false">
+                            <span class="sr-only">Close panel</span>
+                            <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <table class="table-fixed border-collapse border border-slate-400 m-2 ml-2">
+                      <thead>
+                      <tr>
+                        <th class="border border-slate-300 p-2">Image</th>
+                        <th class="border border-slate-300 p-2">Name</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr v-for="(l, index) in locationData" :key="index">
+                        <td class="border border-slate-300 p-2"><img @click="showImageModal(`img/${l.image}`)" class="h-28 w-28 object-cover cursor-pointer" :src="`img/${l.image}`" alt="" /></td>
+                        <td class="border border-slate-300 p-2">{{l.name}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </DialogPanel>
+              </TransitionChild>
+            </div>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
+
+
     <TransitionRoot as="template" :show="open">
       <Dialog as="div" class="relative z-20">
         <div class="fixed inset-0" />
@@ -159,10 +206,19 @@ const showImageModal = (img: string) => {
         </div>
       </Dialog>
     </TransitionRoot>
-    <div id="map"></div>
+    <div id="map">
+
+    </div>
+    <button @click="listOpen = true" id="refreshButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View List</button>
   </div>
 </template>
 
 <style scoped>
-
+#refreshButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  z-index: 19;
+}
 </style>
