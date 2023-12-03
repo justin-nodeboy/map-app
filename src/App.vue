@@ -35,7 +35,7 @@ onMounted(async() => {
     }
   });
 
-  locationData.value = await fetch("https://map.bluebillboard.co.uk/assets/locations.json").then(res => res.json());
+  locationData.value = await fetch("https://admin.bluebillboard.co.uk/api/public/venues").then(res => res.json());
   processLocationData();
 
   setTimeout(function () {
@@ -66,6 +66,15 @@ const showModal = (e: any) => {
 const showImageModal = (img: string) => {
   activeImage.value = img;
   openImage.value = true;
+}
+
+const calculateRate = (meta: any) => {
+  if (meta.isRatePerScreen) {
+    // Handle per screen rate
+    return meta.rate * meta.screenCount;
+  } else {
+    return meta.rate;
+  }
 }
 
 </script>
@@ -102,7 +111,7 @@ const showImageModal = (img: string) => {
                       </thead>
                       <tbody>
                       <tr v-for="(l, index) in locationData" :key="index">
-                        <td class="border border-slate-300 p-2"><img @click="showImageModal(`img/${l.image}`)" class="h-28 w-28 object-cover cursor-pointer" :src="`img/${l.image}`" alt="" /></td>
+                        <td class="border border-slate-300 p-2"><img @click="showImageModal(`https://admin.bluebillboard.co.uk/images/locations/${l.image}`)" class="h-28 w-28 object-cover cursor-pointer" :src="`https://admin.bluebillboard.co.uk/images/locations/${l.image}`" alt="" /></td>
                         <td class="border border-slate-300 p-2">{{l.name}}</td>
                       </tr>
                       </tbody>
@@ -140,19 +149,7 @@ const showImageModal = (img: string) => {
                       </div>
                       <div class="mt-1">
                         <p class="text-sm text-blue-300">
-                          {{meta.address.address1}}
-                        </p>
-                        <p class="text-sm text-blue-300">
-                          {{meta.address.address2}}
-                        </p>
-                        <p class="text-sm text-blue-300">
-                          {{meta.address.address3}}
-                        </p>
-                        <p class="text-sm text-blue-300">
-                          {{meta.address.county}}
-                        </p>
-                        <p class="text-sm text-blue-300">
-                          {{meta.address.postcode}}
+                          {{meta.description}}
                         </p>
                       </div>
                     </div>
@@ -163,7 +160,9 @@ const showImageModal = (img: string) => {
                       <!-- Replace with your content -->
                       <div class="absolute inset-0 py-6 px-4 sm:px-6">
                         <div class="h-full" aria-hidden="true">
-                          <p class="text-black-300" v-html="markdownToHtml"></p>
+                          <p class="text-black-300 text-3xl">Footfall/Month: {{meta.footfallPerMonth}}</p>
+                          <p class="text-black-300 text-3xl mt-2">Total Screens: {{meta.screenCount}}</p>
+                          <p class="text-black-300 text-3xl mt-2">Rate: £{{calculateRate(meta)}}</p>
                         </div>
                       </div>
                       <!-- /End replace -->
