@@ -154,7 +154,7 @@ const calculateRate = (meta: any) => {
                       </div>
                     </div>
                     <div class="relative h-60">
-                      <img @click="showImageModal(`img/${meta.image}`)" class="absolute h-full w-full object-cover cursor-pointer" :src="`img/${meta.image}`" alt="" />
+                      <img @click="showImageModal(`https://admin.bluebillboard.co.uk/images/locations/${meta.image}`)" class="absolute h-full w-full object-cover cursor-pointer" :src="`https://admin.bluebillboard.co.uk/images/locations/${meta.image}`" alt="" />
                     </div>
                     <div class="relative flex-1 py-6 px-4 sm:px-6">
                       <!-- Replace with your content -->
