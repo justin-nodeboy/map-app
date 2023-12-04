@@ -4,8 +4,8 @@ import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { marked } from 'marked';
 
 const open = ref(false);
 const listOpen = ref(false);
@@ -16,7 +16,18 @@ const locationData = ref<any[]>([]);
 const meta = ref();
 const activeImage = ref();
 
-const markdownToHtml = computed(() => marked(meta.value.description));
+interface RateCard {
+  Starter: Costs[];
+  Optimal: Costs[];
+  Enhanced: Costs[];
+}
+
+interface Costs {
+  rateDescription: string;
+  rateCostAllScreens: number;
+  rateCostPerScreen: number;
+  isRatePerScreen: boolean;
+}
 
 onMounted(async() => {
   map.value = L.map('map').setView([50.9885170505752, -0.1969095226736214], 11);
@@ -43,6 +54,12 @@ onMounted(async() => {
   }, 1000);
 });
 
+const categories = ref<RateCard>({
+  Starter: [],
+  Optimal: [],
+  Enhanced: [],
+})
+
 const processLocationData = () => {
   locationData.value.forEach((location: any) => {
     const icon = L.divIcon({
@@ -58,9 +75,15 @@ const processLocationData = () => {
 };
 
 const showModal = (e: any) => {
-  console.log(e.sourceTarget.getProps().meta);
-  open.value = true;
   meta.value = e.sourceTarget.getProps().meta;
+  calculateRate();
+  open.value = true;
+}
+
+const showModalTable = (e: any) => {
+  meta.value = e;
+  calculateRate();
+  open.value = true;
 }
 
 const showImageModal = (img: string) => {
@@ -68,12 +91,50 @@ const showImageModal = (img: string) => {
   openImage.value = true;
 }
 
-const calculateRate = (meta: any) => {
-  if (meta.isRatePerScreen) {
+const calculateRate = () => {
+  if (meta.value.isRatePerScreen) {
     // Handle per screen rate
-    return meta.rate * meta.screenCount;
+    categories.value.Starter = [{
+      rateDescription: "8-10 slots per hour",
+      rateCostAllScreens: (meta.value.rate * meta.value.screenCount) - 50,
+      rateCostPerScreen: meta.value.rate,
+      isRatePerScreen: true
+    }]
+
+    categories.value.Optimal = [{
+      rateDescription: "18-20 slots per hour",
+      rateCostAllScreens: ((meta.value.rate * 2) * meta.value.screenCount) - 100,
+      rateCostPerScreen: (meta.value.rate * 2),
+      isRatePerScreen: true
+    }]
+
+    categories.value.Enhanced = [{
+      rateDescription: "36-40 slots per hour",
+      rateCostAllScreens: ((meta.value.rate * 3) * meta.value.screenCount) - 150,
+      rateCostPerScreen: (meta.value.rate * 3),
+      isRatePerScreen: true
+    }]
   } else {
-    return meta.rate;
+    categories.value.Starter = [{
+      rateDescription: "8-10 slots per hour",
+      rateCostAllScreens: 0,
+      rateCostPerScreen: meta.value.rate,
+      isRatePerScreen: false
+    }]
+
+    categories.value.Optimal = [{
+      rateDescription: "18-20 slots per hour",
+      rateCostAllScreens: 0,
+      rateCostPerScreen: meta.value.rate * 2,
+      isRatePerScreen: false
+    }]
+
+    categories.value.Enhanced = [{
+      rateDescription: "36-40 slots per hour",
+      rateCostAllScreens: 0,
+      rateCostPerScreen: meta.value.rate * 3,
+      isRatePerScreen: false
+    }]
   }
 }
 
@@ -107,12 +168,16 @@ const calculateRate = (meta: any) => {
                       <tr>
                         <th class="border border-slate-300 p-2">Image</th>
                         <th class="border border-slate-300 p-2">Name</th>
+                        <th class="border border-slate-300 p-2">Details</th>
                       </tr>
                       </thead>
                       <tbody>
                       <tr v-for="(l, index) in locationData" :key="index">
                         <td class="border border-slate-300 p-2"><img @click="showImageModal(`https://admin.bluebillboard.co.uk/images/locations/${l.image}`)" class="h-28 w-28 object-cover cursor-pointer" :src="`https://admin.bluebillboard.co.uk/images/locations/${l.image}`" alt="" /></td>
                         <td class="border border-slate-300 p-2">{{l.name}}</td>
+                        <td class="border border-slate-300 p-2">
+                          <a class="cursor-pointer text-blue-500" @click="showModalTable(l)">View</a>
+                        </td>
                       </tr>
                       </tbody>
                     </table>
@@ -156,13 +221,91 @@ const calculateRate = (meta: any) => {
                     <div class="relative h-60">
                       <img @click="showImageModal(`https://admin.bluebillboard.co.uk/images/locations/${meta.image}`)" class="absolute h-full w-full object-cover cursor-pointer" :src="`https://admin.bluebillboard.co.uk/images/locations/${meta.image}`" alt="" />
                     </div>
-                    <div class="relative flex-1 py-6 px-4 sm:px-6">
+                    <div class="relative flex-1 py-6 px-4 sm:px-6 w-full">
                       <!-- Replace with your content -->
                       <div class="absolute inset-0 py-6 px-4 sm:px-6">
-                        <div class="h-full" aria-hidden="true">
-                          <p class="text-black-300 text-3xl">Footfall/Month: {{meta.footfallPerMonth}}</p>
+                        <div class="h-full w-full" aria-hidden="true">
+                          <p class="text-black-300 text-3xl">Footfall/Month: {{meta.footfallPerMonth.toLocaleString()}}</p>
                           <p class="text-black-300 text-3xl mt-2">Total Screens: {{meta.screenCount}}</p>
-                          <p class="text-black-300 text-3xl mt-2">Rate: £{{calculateRate(meta)}}</p>
+                          <p class="text-black-300 text-2xl mt-10">Rate Card</p>
+                          <div class="w-full mt-2">
+                            <TabGroup>
+                              <TabList class="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+                                <Tab
+                                    v-for="category in Object.keys(categories)"
+                                    as="template"
+                                    :key="category"
+                                    v-slot="{ selected }"
+                                >
+                                  <button
+                                      :class="[
+              'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
+              'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+              selected
+                ? 'bg-[#0d47a1] text-white shadow'
+                : 'text-blue-400 hover:bg-white/[0.12] hover:text-[#0d47a1]',
+            ]"
+                                  >
+                                    {{ category }}
+                                  </button>
+                                </Tab>
+                              </TabList>
+
+                              <TabPanels class="mt-2">
+                                <TabPanel
+                                    v-for="(posts, idx) in Object.values(categories)"
+                                    :key="idx"
+                                    :class="[
+            'rounded-xl bg-white p-3',
+            'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+          ]"
+                                >
+                                  <ul>
+                                    <li
+                                        v-for="(post, i) in posts"
+                                        :key="i"
+                                        class="relative rounded-md p-3 hover:bg-gray-100"
+                                    >
+                                      <h3 class="text-xl font-medium leading-5">
+                                        Frequency: {{ post.rateDescription }}
+                                      </h3>
+                                      <ul
+                                          v-if="post.isRatePerScreen"
+                                          class="mt-2 flex space-x-1 text-lg font-normal leading-4 text-gray-500"
+                                      >
+                                        <li>£{{ post.rateCostAllScreens }}</li>
+                                        <li>-</li>
+                                        <li>includes all {{meta.screenCount}} screens,</li>
+                                        <li>per month</li>
+                                        <li>+ VAT</li>
+                                      </ul>
+
+                                      <ul
+                                          v-if="post.isRatePerScreen"
+                                          class="mt-2 flex space-x-1 text-lg font-normal leading-4 text-gray-500"
+                                      >
+                                        <li>£{{ post.rateCostPerScreen }}</li>
+                                        <li>-</li>
+                                        <li>per screen,</li>
+                                        <li>per month</li>
+                                        <li>+ VAT</li>
+                                      </ul>
+
+                                      <ul
+                                          v-if="!post.isRatePerScreen"
+                                          class="mt-2 flex space-x-1 text-lg font-normal leading-4 text-gray-500"
+                                      >
+                                        <li>£{{ post.rateCostPerScreen }}</li>
+                                        <li>-</li>
+                                        <li>per month</li>
+                                        <li>+ VAT</li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                                </TabPanel>
+                              </TabPanels>
+                            </TabGroup>
+                          </div>
                         </div>
                       </div>
                       <!-- /End replace -->
