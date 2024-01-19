@@ -286,7 +286,7 @@ const closeWizard = () => {
                 <h2 class="text-2xl font-semibold mb-4">{{ plan.name }}</h2>
                 <p class="text-gray-600 mb-4 dark:text-white">{{ plan.description }}</p>
                 <div class="flex items-center justify-center mb-4">
-                  <span class="text-4xl font-semibold">£{{ plan.price }}</span>
+                  <span class="text-4xl font-semibold">£{{ plan.price.toFixed(2) }}</span>
                   <span class="text-gray-600 ml-2 dark:text-white">/month + VAT</span>
                 </div>
                 <ul class="text-gray-600 dark:text-white">
