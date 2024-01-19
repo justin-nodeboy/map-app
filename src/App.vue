@@ -158,7 +158,7 @@ const calculateRate = () => {
                @show-modal-table="showModalTable"
                @close-list="listOpen = false" />
 
-    <info-view :categories="categories" :open="open" :meta="meta" @close-list="open = false" />
+    <info-view :categories="categories" :open="open" :meta="meta" @close-list="open = false" @show-image-modal="showImageModal" />
 
     <image-view :open-image="openImage" :active-image="activeImage" @close-image-modal="openImage = false" />
     <wizard-view :open-wizard="wizardOpen" :venues="locationData" @close-wizard="wizardOpen = false" />
