@@ -200,7 +200,7 @@ const closeWizard = () => {
                      tableStyle="min-width: 50rem"
                      v-model:filters="filters"
                      filterDisplay="row"
-                     :globalFilterFields="['name']"
+                     :globalFilterFields="['name', 'city']"
           >
             <template #header>
               <div class="flex justify-content-end">
@@ -218,6 +218,7 @@ const closeWizard = () => {
             </Column>
 
             <Column field="name" header="Name"></Column>
+            <Column field="city" header="City"></Column>
 
             <Column header="Action">
               <template #body="slotProps">
