@@ -206,7 +206,7 @@ const closeWizard = () => {
               <div class="flex justify-content-end">
                     <span class="p-input-icon-left">
                         <i class="pi pi-search" />
-                        <InputText class="ml-2" v-model="filters['global'].value" placeholder="Search" />
+                        <InputText class="ml-2" v-model="filters['global'].value" placeholder="Search (Name or Location)" />
                     </span>
               </div>
             </template>
