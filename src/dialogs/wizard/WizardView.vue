@@ -203,10 +203,10 @@ const closeWizard = () => {
                      :globalFilterFields="['name', 'city', 'type']"
           >
             <template #header>
-              <div class="flex justify-content-end">
-                    <span class="p-input-icon-left">
+              <div class="flex w-full">
+                    <span class="p-input-icon-left w-full">
                         <i class="pi pi-search" />
-                        <InputText class="ml-2" v-model="filters['global'].value" placeholder="Search (Name, Type or Location)" />
+                        <InputText class="ml-2 w-3/4" v-model="filters['global'].value" placeholder="Search (Name, Type or Location)" />
                     </span>
               </div>
             </template>
