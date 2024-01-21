@@ -77,6 +77,7 @@ const closeTheList = () => {
                     <div class="absolute inset-0 py-6 px-4 sm:px-6">
                       <div class="h-full w-full" aria-hidden="true">
                         <p class="text-black-300 text-3xl">City: {{props.meta.city}}</p>
+                        <p class="text-black-300 text-3xl mt-2">Type: {{props.meta.type}}</p>
                         <p class="text-black-300 text-3xl mt-2">Footfall/Month: {{props.meta.footfallPerMonth.toLocaleString()}}</p>
                         <p class="text-black-300 text-3xl mt-2">Total Screens: {{props.meta.screenCount}}</p>
                         <p class="text-black-300 text-2xl mt-10">Rate Card</p>

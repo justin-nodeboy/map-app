@@ -200,13 +200,13 @@ const closeWizard = () => {
                      tableStyle="min-width: 50rem"
                      v-model:filters="filters"
                      filterDisplay="row"
-                     :globalFilterFields="['name', 'city']"
+                     :globalFilterFields="['name', 'city', 'type']"
           >
             <template #header>
               <div class="flex justify-content-end">
                     <span class="p-input-icon-left">
                         <i class="pi pi-search" />
-                        <InputText class="ml-2" v-model="filters['global'].value" placeholder="Search (Name or Location)" />
+                        <InputText class="ml-2" v-model="filters['global'].value" placeholder="Search (Name, Type or Location)" />
                     </span>
               </div>
             </template>
@@ -218,6 +218,7 @@ const closeWizard = () => {
             </Column>
 
             <Column field="name" header="Name"></Column>
+            <Column field="type" header="Type"></Column>
             <Column field="city" header="City"></Column>
 
             <Column header="Action">
