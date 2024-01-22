@@ -43,7 +43,7 @@ onMounted(async() => {
   let mapSource = "https://b.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
   //Check for Dark Mode
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    mapSource = "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png";
+    mapSource = "https://b.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
   }
 
   L.tileLayer(mapSource, {
