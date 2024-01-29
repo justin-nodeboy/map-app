@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import { FilterMatchMode } from 'primevue/api';
+import {useToast} from "primevue/usetoast";
 
 interface SelectedVenues {
   selected: any[];
@@ -13,11 +14,19 @@ interface Plan {
   feature1: string;
   features: string[];
 }
-
+const toast = useToast();
 const isCharity = ref<boolean>(false);
 const isPartner = ref<boolean>(false);
 const isChamber = ref<boolean>(false);
 const isCircle = ref<boolean>(false);
+const saveQuote = ref<boolean>(false);
+const emailAddress = ref<string>("");
+const isSavingQuote = ref<boolean>(false);
+const emailSearch = ref<string>("");
+const openSavedSearch = ref<boolean>(false);
+const savedQuotes = ref<any[]>([]);
+const loadQuote = ref<any>();
+const name = ref<string>("");
 const totalRate = ref(0);
 const op = ref();
 const filters = ref({
@@ -119,7 +128,6 @@ const resetCalculations = () => {
 
 const calculateQuote = () => {
   resetCalculations();
-
   selectedVenues.value?.selected.forEach((venue: any) => {
     if (venue.isRatePerScreen) {
       totalRate.value += venue.rate * venue.screenCount - 50;
@@ -178,23 +186,117 @@ const calculateQuote = () => {
 
 };
 
+const searchForSavedQuotes = async () => {
+  try {
+    isSavingQuote.value = true;
+    if (emailSearch.value === "") {
+      toast.add({severity: 'error', summary: 'Error', detail: 'Please enter your email address.', life: 3000});
+      return;
+    }
+
+    savedQuotes.value = await fetch(`https://admin.bluebillboard.co.uk/api/public/quotes?q=${emailSearch.value}`).then(res => res.json());
+  } catch (e: any) {
+    toast.add({severity: 'error', summary: 'Error', detail: e.message, life: 3000});
+  } finally {
+    isSavingQuote.value = false;
+  }
+}
+
+const saveNewQuote = async () => {
+  if (emailAddress.value === "") {
+    toast.add({severity: 'error', summary: 'Error', detail: 'Please enter your email address.', life: 3000});
+    return;
+  }
+  if (selectedVenues.value?.selected.length === 0) {
+    toast.add({severity: 'error', summary: 'Error', detail: 'Please select at least one venue.', life: 3000});
+    return;
+  }
+  if (name.value === "") {
+    toast.add({severity: 'error', summary: 'Error', detail: 'Please enter your name.', life: 3000});
+    return;
+  }
+
+  try {
+    isSavingQuote.value = true;
+    const quote = {
+      name: name.value,
+      email: emailAddress.value,
+      venues: selectedVenues.value?.selected,
+      isCharity: isCharity.value,
+      isPartner: isPartner.value,
+      isChamber: isChamber.value,
+      duration: duration.value,
+      date: new Date()
+    };
+
+    await createQuote(quote);
+    closeWizard();
+    toast.add({severity: 'success', summary: 'Quote Saved', detail: 'Your quote has been saved successfully.', life: 3000});
+  } catch (e: any) {
+    toast.add({severity: 'error', summary: 'Error', detail: e.message, life: 3000});
+  } finally {
+    isSavingQuote.value = false;
+  }
+
+}
+
 const toggle = (event: any) => {
   op.value.toggle(event);
 }
 
+const createQuote = async (quote: any) => {
+  await fetch(`https://admin.bluebillboard.co.uk/api/public/quotes`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(quote)
+  });
+}
+
 
 const closeWizard = () => {
+  saveQuote.value = false;
+  totalRate.value = 0;
+  selectedVenues.value = undefined;
+  active.value = 0;
+  filters.value.global.value = null;
+  resetCalculations();
   emit('close-wizard');
 };
+
+watch(loadQuote, (newValue) => {
+  if (newValue) {
+    const val = JSON.parse(JSON.stringify(newValue));
+    selectedVenues.value = {
+      selected: val.venues
+    }
+    isCharity.value = val.isCharity;
+    isPartner.value = val.isPartner;
+    isChamber.value = val.isChamber;
+    duration.value = val.duration;
+    calculateQuote();
+    active.value = 2;
+    openSavedSearch.value = false;
+  }
+});
+
+watch(active, (newValue) => {
+  if (newValue === 2) {
+    calculateQuote();
+  }
+});
 </script>
 
 <template>
   <Dialog v-model:visible="props.openWizard" modal header="Quote Wizard" :style="{ width: '70rem' }"
           style="max-height: 90vh; overflow-y: auto;" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :closable="false">
     <div>
-      <Steps v-model:activeStep="active" :model="items"/>
+      <Steps v-model:activeStep="active" :model="items" :readonly="false" class="cursor-pointer" />
       <Card v-if="active === 0">
-        <template #title> Choose your venues</template>
+        <template #title> Choose your venues
+          <Button icon="pi pi-eye" class="float-right" @click="openSavedSearch = true" label="Load saved quotes" />
+        </template>
         <template #content>
           <DataTable :value="venues"
                      tableStyle="min-width: 50rem"
@@ -298,6 +400,20 @@ const closeWizard = () => {
               </div>
             </div>
           </div>
+          <div class="flex items-center mt-2">
+            <Checkbox v-model="saveQuote" name="saveQuote" :binary="true"></Checkbox>
+            <label class="leading-7 text-gray-900 dark:text-white sm:truncate text-xl sm:tracking-tight ml-2"
+                   for="saveQuote">Tick to save this quote</label>
+          </div>
+          <div class="mt-4 block" v-if="saveQuote">
+            <label class="leading-7 text-gray-900 dark:text-white sm:truncate text-xl sm:tracking-tight block"
+                   for="emailAddress">Email Address (So you can load your quote later)</label>
+            <InputText v-model="emailAddress" placeholder="Enter your email address" id="emailAddress" class="w-3/4 mt-2 block" />
+            <label class="leading-7 text-gray-900 dark:text-white sm:truncate text-xl sm:tracking-tight block"
+                   for="emailAddress">Name</label>
+            <InputText v-model="name" placeholder="Enter your name" id="name" class="w-3/4 mt-2 block" />
+            <Button :loading="isSavingQuote" icon="pi pi-save" severity="success" @click="saveNewQuote" label="Save" class="mt-4" />
+          </div>
         </template>
         <template #footer>
           <Button icon="pi pi-angle-left" @click="active = 1" label="Back"/>
@@ -309,6 +425,33 @@ const closeWizard = () => {
     <template #footer>
       <Button label="Done" icon="pi pi-times" @click="closeWizard" text/>
     </template>
+  </Dialog>
+
+  <Dialog v-model:visible="openSavedSearch" modal header="Load your saved quote" :style="{ width: '30rem' }"
+          style="max-height: 40vh; overflow-y: auto;" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <div>
+      <label class="leading-7 text-gray-900 dark:text-white sm:truncate text-xl sm:tracking-tight block"
+             for="emailAddress">Email Address</label>
+      <InputText v-model="emailSearch" placeholder="Enter your email address" id="emailAddress" class="w-3/4 mt-2 block" />
+      <Button :loading="isSavingQuote" icon="pi pi-search" severity="success" @click="searchForSavedQuotes" label="Search" class="mt-4" />
+      <div v-if="savedQuotes.length > 0" class="mt-4">
+        <Dropdown v-model="loadQuote" :options="savedQuotes" placeholder="Select quote" optionLabel="date"
+                  class="w-full">
+          <template #option="slotProps">
+            <div class="flex align-items-center">
+              <div>{{ new Date(slotProps.option.date).toLocaleDateString('en-gb') }}</div>
+            </div>
+          </template>
+          <template #value="slotProps">
+            <div class="flex align-items-center" v-if="slotProps.value">
+              {{new Date(slotProps.value.date).toLocaleDateString('en-gb')}}
+            </div>
+          </template>
+        </Dropdown>
+        <label class="leading-7 text-gray-900 dark:text-white sm:truncate sm:tracking-tight ml-2"
+               for="isMultiMonth">Select your saved quote</label>
+      </div>
+    </div>
   </Dialog>
 </template>
 

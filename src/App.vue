@@ -168,6 +168,7 @@ const calculateRate = () => {
     </div>
     <button @click="wizardOpen = true" id="quoteButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Get Quote</button>
     <button @click="listOpen = true" id="listButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View List</button>
+    <toast />
   </div>
 </template>
 

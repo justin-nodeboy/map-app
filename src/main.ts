@@ -16,6 +16,8 @@ import Dropdown from "primevue/dropdown";
 import Avatar from "primevue/avatar";
 import OverlayPanel from 'primevue/overlaypanel';
 import InputText from "primevue/inputtext";
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
 //Design system
 import MyDesignSystem from '@/design-system/index.js';
 
@@ -33,5 +35,7 @@ app.component('Dropdown', Dropdown);
 app.component('Avatar', Avatar);
 app.component('OverlayPanel', OverlayPanel);
 app.component('InputText', InputText);
+app.component('Toast', Toast);
+app.use(ToastService);
 
 app.mount('#mapApp');
