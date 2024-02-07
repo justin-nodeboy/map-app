@@ -349,17 +349,17 @@ watch(active, (newValue) => {
         <template #title> Additional information</template>
         <template #content>
           <div class="flex items-center">
-            <Checkbox v-model="isCharity" name="isCharity" :binary="true"></Checkbox>
+            <Checkbox v-model="isCharity" name="isCharity" :binary="true" :disabled="isPartner || isChamber"></Checkbox>
             <label class="leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight ml-2"
                    for="isCharity">Are you a registered charity?</label>
           </div>
           <div class="flex items-center mt-2">
-            <Checkbox v-model="isPartner" name="isPartner" :binary="true"></Checkbox>
+            <Checkbox v-model="isPartner" name="isPartner" :binary="true" :disabled="isChamber || isCharity"></Checkbox>
             <label class="leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight ml-2"
                    for="isPartner">Do you have a Blue Billboard screen?</label>
           </div>
           <div class="flex items-center mt-2">
-            <Checkbox v-model="isChamber" name="isChamber" :binary="true"></Checkbox>
+            <Checkbox v-model="isChamber" name="isChamber" :binary="true" :disabled="isCharity || isPartner"></Checkbox>
             <label class="leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight ml-2"
                    for="isChamber">Are you a member of an approved Chamber of Commerce (See list)?</label>
             <Avatar @click="toggle" icon="pi pi-info-circle" style="background-color: #0d47a1; color: #ffffff" shape="circle" class="ml-3" />
