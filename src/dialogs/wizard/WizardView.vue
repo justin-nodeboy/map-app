@@ -128,6 +128,7 @@ const resetCalculations = () => {
 
 const calculateQuote = () => {
   resetCalculations();
+  let totalDiscount = 0;
   selectedVenues.value?.selected.forEach((venue: any) => {
     if (venue.isRatePerScreen) {
       totalRate.value += venue.rate * venue.screenCount - 50;
@@ -139,51 +140,55 @@ const calculateQuote = () => {
   // Apply Discounts
   // Apply Charity
   if (isCharity.value) {
-    totalRate.value = totalRate.value - (totalRate.value * 0.25);
+    totalDiscount = totalDiscount + 0.25;
     plans.value[0].features.push("Includes Charity discount of 25%");
     plans.value[1].features.push("Includes Charity discount of 25%");
     plans.value[2].features.push("Includes Charity discount of 25%");
   }
   // Apply Partner
   if (isPartner.value) {
-    totalRate.value = totalRate.value - (totalRate.value * 0.25);
+    totalDiscount = totalDiscount + 0.25;
     plans.value[0].features.push("Includes Partner discount of 25%");
     plans.value[1].features.push("Includes Partner discount of 25%");
     plans.value[2].features.push("Includes Partner discount of 25%");
   }
   // Apply Chamber
   if (isChamber.value) {
-    totalRate.value = totalRate.value - (totalRate.value * 0.25);
+    totalDiscount = totalDiscount + 0.25;
     plans.value[0].features.push("Includes Chamber discount of 25%");
     plans.value[1].features.push("Includes Chamber discount of 25%");
     plans.value[2].features.push("Includes Chamber discount of 25%");
   }
   // Apply Circle
   if (isCircle.value) {
-    totalRate.value = totalRate.value - (totalRate.value * 0.25);
+    totalDiscount = totalDiscount + 0.25;
     plans.value[0].features.push("Includes WBC discount of 25%");
     plans.value[1].features.push("Includes WBC discount of 25%");
     plans.value[2].features.push("Includes WBC discount of 25%");
   }
   // Apply MultiSite
   if (selectedVenues.value && selectedVenues.value?.selected.length >= 2) {
-    totalRate.value = totalRate.value - (totalRate.value * 0.10);
+    totalDiscount = totalDiscount + 0.10;
     plans.value[0].features.push("Includes Multi Site discount of 10%");
     plans.value[1].features.push("Includes Multi Site discount of 10%");
     plans.value[2].features.push("Includes Multi Site discount of 10%");
   }
   // Apply MultiMonth
   if (duration.value >= 3) {
-    totalRate.value = totalRate.value - (totalRate.value * 0.10);
+    totalDiscount = totalDiscount + 0.10;
     plans.value[0].features.push("Includes Multi Month discount of 10%");
     plans.value[1].features.push("Includes Multi Month discount of 10%");
     plans.value[2].features.push("Includes Multi Month discount of 10%");
   }
 
+  applyDiscount(totalDiscount);
   plans.value[0].price = totalRate.value;
   plans.value[1].price = totalRate.value * 1.8;
   plans.value[2].price = totalRate.value * 3.8;
+};
 
+const applyDiscount = (discount: number) => {
+  totalRate.value = totalRate.value - (totalRate.value * discount);
 };
 
 const searchForSavedQuotes = async () => {
