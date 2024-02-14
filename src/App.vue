@@ -116,14 +116,14 @@ const goToLocationOnMap = (location: any) => {
         closeButton: { style: `color:${meta.level === 'Blue' ? 'white' : ''}` }
       }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       <template #header>
-        <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`" class="text-3xl">{{meta.name}}</p>
+        <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="text-3xl dark:text-white">{{meta.name}}</p>
       </template>
-      <span class="font-semibold block mb-5" :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">Part of our {{meta.level}} collection</span>
+      <span class="font-semibold block mb-5 dark:text-white" :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">Part of our {{meta.level}} collection</span>
       <div class="flex align-items-center gap-3">
-        <p class="w-6rem" :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">{{meta.description}}</p>
+        <p class="w-6rem dark:text-white" :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">{{meta.description}}</p>
       </div>
       <div class="flex align-items-center gap-3 mt-2">
-        <p class="w-6rem" :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">Prices start from: £{{meta.isRatePerScreen ? `${(meta.rate * meta.screenCount) - 50}` : `${meta.rate}`}}/month + VAT</p>
+        <p class="w-6rem dark:text-white" :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">Prices start from: £{{meta.isRatePerScreen ? `${(meta.rate * meta.screenCount) - 50}` : `${meta.rate}`}}/month + VAT</p>
       </div>
       <div class="flex gap-3 mb-3 w-full">
         <Accordion class="w-full">
@@ -131,13 +131,13 @@ const goToLocationOnMap = (location: any) => {
         headerIcon: { style: `color:${meta.level === 'Blue' ? 'white' : ''}` }
       }">
             <template #header>
-              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">More info</p>
+              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">More info</p>
             </template>
             <template #default>
-              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">City: {{meta.city}}</p>
-              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`" class="mt-2">Type: {{meta.type}}</p>
-              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`" class="mt-2">Footfall (Monthly): {{meta.footfallPerMonth.toLocaleString()}}</p>
-              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`" class="mt-2">Screens: {{meta.screenCount}}</p>
+              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="dark:text-white">City: {{meta.city}}</p>
+              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="mt-2 dark:text-white">Type: {{meta.type}}</p>
+              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="mt-2 dark:text-white">Footfall (Monthly): {{meta.footfallPerMonth.toLocaleString()}}</p>
+              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="mt-2 dark:text-white">Screens: {{meta.screenCount}}</p>
 
             </template>
 
