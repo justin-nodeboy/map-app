@@ -39,7 +39,7 @@ const props = defineProps({
     required: true
   },
   venues: {
-    type: Array,
+    type: Array<any>,
     required: true
   }
 });
@@ -294,7 +294,7 @@ watch(active, (newValue) => {
 </script>
 
 <template>
-  <Dialog v-model:visible="props.openWizard" modal header="Quote Wizard" :style="{ width: '70rem' }"
+  <Dialog v-model:visible="props.openWizard" modal header="Quote Wizard" :style="{ width: '70rem', 'background-color': 'white' }"
           style="max-height: 90vh; overflow-y: auto;" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :closable="false">
     <div>
       <Steps v-model:activeStep="active" :model="items" :readonly="false" class="cursor-pointer" />
@@ -325,6 +325,7 @@ watch(active, (newValue) => {
             </Column>
 
             <Column field="name" header="Name"></Column>
+            <Column field="level" header="Collection"></Column>
             <Column field="type" header="Type"></Column>
             <Column field="city" header="City"></Column>
 

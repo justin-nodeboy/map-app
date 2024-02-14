@@ -3,23 +3,9 @@ import { ref, onMounted } from "vue";
 import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
-import ListView from "./dialogs/list/ListView.vue";
-import ImageView from "./dialogs/image/ImageView.vue";
-import InfoView from "./dialogs/info/InfoView.vue";
 import WizardView from "./dialogs/wizard/WizardView.vue";
-
-interface RateCard {
-  Starter: Costs[];
-  Optimal: Costs[];
-  Enhanced: Costs[];
-}
-
-interface Costs {
-  rateDescription: string;
-  rateCostAllScreens: number;
-  rateCostPerScreen: number;
-  isRatePerScreen: boolean;
-}
+import {useVenueList} from "@/composables/useVenueList";
+import VenueList from "@/dialogs/listv2/VenueList.vue";
 
 const open = ref(false);
 const listOpen = ref(false);
@@ -30,11 +16,18 @@ const markerGroup = ref();
 const locationData = ref<any[]>([]);
 const meta = ref();
 const activeImage = ref();
-const categories = ref<RateCard>({
-  Starter: [],
-  Optimal: [],
-  Enhanced: [],
-});
+const categories = ref<any[]>([]);
+const {sidebarVisible, levelColour} = useVenueList();
+const op = ref();
+const active = ref(0);
+
+const items = ref([
+  { label: 'Starter', icon: 'pi pi-home' },
+  { label: 'Optimal', icon: 'pi pi-chart-line' },
+  { label: 'Enhanced', icon: 'pi pi-list' }
+]);
+
+const levels = ["Blue", "Gold", "Platinum"];
 
 onMounted(async() => {
   map.value = L.map('map').setView([50.9885170505752, -0.1969095226736214], 11);
@@ -61,7 +54,27 @@ onMounted(async() => {
     }
   });
 
-  locationData.value = await fetch("https://admin.bluebillboard.co.uk/api/public/venues").then(res => res.json());
+  let legend = new L.Control({position: 'topleft'});
+
+  legend.onAdd = function () {
+
+    let div = L.DomUtil.create('div', 'info legend'),
+        labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (let i = 0; i < levels.length; i++) {
+      div.innerHTML +=
+          '<i style="background:' + levelColour(levels[i]) + '"></i> ' +
+          levels[i] + ' Collection<br>';
+    }
+
+    return div;
+  };
+
+  legend.addTo(map.value);
+
+  //locationData.value = await fetch("https://admin.bluebillboard.co.uk/api/public/venues").then(res => res.json());
+  locationData.value = await fetch("http://localhost:5055/api/public/venues").then(res => res.json());
   processLocationData();
 
   setTimeout(function () {
@@ -70,10 +83,11 @@ onMounted(async() => {
 });
 
 const processLocationData = () => {
+  if (!locationData.value) return;
   locationData.value.forEach((location: any) => {
     const icon = L.divIcon({
       className: 'custom-div-icon',
-      html: `<div style="background:#0d47a1;" class="marker-pin"></div><img src="img/customcolor_icon_transparent_background.png"  alt="bbLogo"/>`,
+      html: `<div style="background:${levelColour(location.level)};" class="marker-pin"></div><img src="img/customcolor_icon_transparent_background.png"  alt="bbLogo"/>`,
       iconSize: [50, 72],
       iconAnchor: [25, 72]
     });
@@ -85,94 +99,68 @@ const processLocationData = () => {
 
 const showModal = (e: any) => {
   meta.value = e.sourceTarget.getProps().meta;
-  calculateRate();
   open.value = true;
 }
 
-const showModalTable = (e: any) => {
-  meta.value = e;
-  calculateRate();
-  open.value = true;
-}
 
-const showImageModal = (img: string) => {
-  activeImage.value = img;
-  openImage.value = true;
-}
-
-const calculateRate = () => {
-  if (meta.value.isRatePerScreen) {
-    // Handle per screen rate
-    categories.value.Starter = [{
-      rateDescription: "8-10 slots per hour",
-      rateCostAllScreens: (meta.value.rate * meta.value.screenCount) - 50,
-      rateCostPerScreen: meta.value.rate,
-      isRatePerScreen: true
-    }]
-
-    categories.value.Optimal = [{
-      rateDescription: "18-20 slots per hour",
-      rateCostAllScreens: ((meta.value.rate * 2) * meta.value.screenCount) - 100,
-      rateCostPerScreen: (meta.value.rate * 2),
-      isRatePerScreen: true
-    }]
-
-    categories.value.Enhanced = [{
-      rateDescription: "36-40 slots per hour",
-      rateCostAllScreens: ((meta.value.rate * 3) * meta.value.screenCount) - 150,
-      rateCostPerScreen: (meta.value.rate * 3),
-      isRatePerScreen: true
-    }]
-  } else {
-    categories.value.Starter = [{
-      rateDescription: "8-10 slots per hour",
-      rateCostAllScreens: 0,
-      rateCostPerScreen: meta.value.rate,
-      isRatePerScreen: false
-    }]
-
-    categories.value.Optimal = [{
-      rateDescription: "18-20 slots per hour",
-      rateCostAllScreens: 0,
-      rateCostPerScreen: meta.value.rate * 2,
-      isRatePerScreen: false
-    }]
-
-    categories.value.Enhanced = [{
-      rateDescription: "36-40 slots per hour",
-      rateCostAllScreens: 0,
-      rateCostPerScreen: meta.value.rate * 3,
-      isRatePerScreen: false
-    }]
-  }
+const goToLocationOnMap = (location: any) => {
+  map.value.setView([location.coordinates[1], location.coordinates[0]], 20);
+  sidebarVisible.value = false;
 }
 
 </script>
 
 <template>
   <div class="flex h-screen">
-    <list-view
-        v-if="locationData && locationData.length > 0"
-        :list-open="listOpen" :location-data="locationData"
-               @show-image-modal="showImageModal"
-               @show-modal-table="showModalTable"
-               @close-list="listOpen = false" />
+    <Dialog v-if="meta" v-model:visible="open" modal :style="{ width: '55rem', 'background-color': levelColour(meta.level), 'max-height': '90vh', 'overflow-y': 'auto' }" :pt="{
+        closeButton: { style: `color:${meta.level === 'Blue' ? 'white' : ''}` }
+      }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+      <template #header>
+        <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`" class="text-3xl">{{meta.name}}</p>
+      </template>
+      <span class="font-semibold block mb-5" :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">Part of our {{meta.level}} collection</span>
+      <div class="flex align-items-center gap-3">
+        <p class="w-6rem" :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">{{meta.description}}</p>
+      </div>
+      <div class="flex align-items-center gap-3 mt-2">
+        <p class="w-6rem" :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">Prices start from: £{{meta.isRatePerScreen ? `${(meta.rate * meta.screenCount) - 50}` : `${meta.rate}`}}/month + VAT</p>
+      </div>
+      <div class="flex gap-3 mb-3 w-full">
+        <Accordion class="w-full">
+          <AccordionTab :pt="{
+        headerIcon: { style: `color:${meta.level === 'Blue' ? 'white' : ''}` }
+      }">
+            <template #header>
+              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">More info</p>
+            </template>
+            <template #default>
+              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`">City: {{meta.city}}</p>
+              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`" class="mt-2">Type: {{meta.type}}</p>
+              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`" class="mt-2">Footfall (Monthly): {{meta.footfallPerMonth.toLocaleString()}}</p>
+              <p :style="`color:${meta.level === 'Blue' ? 'white' : 'black'}`" class="mt-2">Screens: {{meta.screenCount}}</p>
 
-    <info-view :categories="categories" :open="open" :meta="meta" @close-list="open = false" @show-image-modal="showImageModal" />
+            </template>
 
-    <image-view :open-image="openImage" :active-image="activeImage" @close-image-modal="openImage = false" />
+          </AccordionTab>
+        </Accordion>
+      </div>
+      <div class="flex gap-3 mb-5">
+        <img class="max-h-3/4 w-full object-cover" :src="`https://admin.bluebillboard.co.uk/images/locations/${meta.image}`" alt="" />
+      </div>
+    </Dialog>
+
     <wizard-view :open-wizard="wizardOpen" :venues="locationData" @close-wizard="wizardOpen = false" />
-
+    <venue-list :location-data="locationData" @set-location="goToLocationOnMap" />
     <div id="map" >
 
     </div>
     <button @click="wizardOpen = true" id="quoteButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Get Quote</button>
-    <button @click="listOpen = true" id="listButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View List</button>
+    <button @click="sidebarVisible = true" id="listButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View List</button>
     <toast />
   </div>
 </template>
 
-<style scoped>
+<style>
 #listButton {
   position: absolute;
   top: 20px;
@@ -197,5 +185,30 @@ const calculateRate = () => {
   .map-tiles {
     filter:var(--map-tiles-filter, none);
   }
+}
+
+.legend {
+  line-height: 18px;
+  color: #555;
+}
+.legend i {
+  width: 100%;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+}
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
 }
 </style>

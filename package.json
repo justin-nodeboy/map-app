@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.7.17",
     "@heroicons/vue": "^2.0.14",
     "leaflet": "^1.9.3",
     "leaflet-draw": "^1.0.4",

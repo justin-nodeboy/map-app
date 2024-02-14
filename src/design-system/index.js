@@ -432,7 +432,7 @@ const MyDesignSystem = {
             ]
         }),
         header: {
-            class: ['flex items-center justify-between shrink-0', 'bg-white text-gray-800 border-t-0  rounded-tl-lg rounded-tr-lg p-6', 'dark:bg-gray-900  dark:text-white/80']
+            class: ['flex items-center justify-between shrink-0', 'text-gray-800 border-t-0  rounded-tl-lg rounded-tr-lg p-6', 'dark:bg-gray-900  dark:text-white/80']
         },
         headerTitle: {
             class: 'font-bold text-lg'
@@ -455,7 +455,7 @@ const MyDesignSystem = {
         content: ({state, instance}) => ({
             class: [
                 'overflow-y-auto',
-                'bg-white text-gray-700 px-6 pb-8 pt-0',
+                'text-gray-700 px-6 pb-8 pt-0',
                 ,
                 'dark:bg-gray-900  dark:text-white/80',
                 {
@@ -1246,7 +1246,7 @@ const MyDesignSystem = {
         transition: TRANSITIONS.toggleable
     },
     avatar: {
-        root: ({props:e,parent:r})=>{var t,o,i;return{class:[{"text-xl":e.size=="large","text-2xl":e.size=="xlarge"},"inline-flex items-center justify-center","relative",{"h-8 w-8":e.size==null||e.size=="normal","w-12 h-12":e.size=="large","w-16 h-16":e.size=="xlarge"},{"-ml-4":((t=r.instance.$style)==null?void 0:t.name)=="avatargroup"},{"rounded-lg":e.shape=="square","rounded-full":e.shape=="circle"},{"border-2":((o=r.instance.$style)==null?void 0:o.name)=="avatargroup"},"bg-surface-300 dark:bg-surface-700",{"border-white dark:border-surface-800":((i=r.instance.$style)==null?void 0:i.name)=="avatargroup"}]}},
+        root: ({props:e,parent:r})=>{var t,o,i;return{class:[{"text-sm":e.size==null||e.size=="normal","text-lg":e.size=="large","text-xl":e.size=="xlarge"},"inline-flex items-center justify-center","shrink-0","relative",{"h-8 w-8":e.size==null||e.size=="normal","w-12 h-12":e.size=="large","w-16 h-16":e.size=="xlarge"},{"-ml-4":((t=r.instance.$style)==null?void 0:t.name)=="avatargroup"},{"rounded-lg":e.shape=="square","rounded-full":e.shape=="circle"},{"border-2":((o=r.instance.$style)==null?void 0:o.name)=="avatargroup"},"bg-surface-100 dark:bg-surface-700",{"border-white dark:border-surface-800":((i=r.instance.$style)==null?void 0:i.name)=="avatargroup"}]}},
         image: {
             class: "h-full w-full"
         }
@@ -1264,7 +1264,106 @@ const MyDesignSystem = {
             leaveActiveClass: "transition-opacity duration-100 ease-linear",
             leaveToClass: "opacity-0"
         }
-    }
+    },
+    sidebar: {
+        root: ({props:e})=>({class:["flex flex-col","relative",{"!transition-none !transform-none !w-screen !h-screen !max-h-full !top-0 !left-0":e.position=="full"},{"h-full w-full max-w-[42rem]":e.position=="left"||e.position=="right","h-auto w-full":e.position=="top"||e.position=="bottom"},"border-0 dark:border","shadow-xl","bg-white dark:bg-surface-800","text-surface-700 dark:text-white/80","dark:border-surface-700","transition-transform","duration-300","pointer-events-auto"]}),
+        header: {
+            class: ["flex items-center justify-between", "shrink-0", "px-6 pt-6", "bg-white dark:bg-surface-800", "text-surface-700 dark:text-surface-0/80"]
+        },
+        title: {
+            class: ["font-semibold leading-6 text-base m-0 bg-white"]
+        },
+        icons: {
+            class: ["flex items-center"]
+        },
+        closeButton: {
+            class: ["relative", "flex items-center justify-center", "mr-2", "last:mr-0", "w-6 h-6", "border-0", "rounded-full", "text-surface-500", "bg-transparent", "transition duration-200 ease-in-out", "hover:text-surface-700 dark:hover:text-white/80", "hover:bg-surface-100 dark:hover:bg-surface-800/80", "focus:outline-none focus:outline-offset-0 focus:ring-1 focus:ring-inset", "focus:ring-primary-500 dark:focus:ring-primary-400", "overflow-hidden"]
+        },
+        closeicon: {
+            class: ["inline-block", "w-3", "h-3"]
+        },
+        content: {
+            class: ["px-6 pb-6", "mt-6", "h-full", "w-full", "grow", "overflow-y-auto", "bg-white"]
+        },
+        mask: ({props:e})=>({class:["transition","duration-300",{"p-5":!e.position=="full"},{"has-[.mask-active]:bg-transparent dark:has-[.mask-active]:bg-transparent bg-surface-500/70 dark:bg-surface-700/70":e.modal,"has-[.mask-active]:backdrop-blur-none backdrop-blur-sm":e.modal}]}),
+        transition: ({props:e})=>e.position==="top"?{enterFromClass:"translate-x-0 -translate-y-full translate-z-0 mask-active",leaveToClass:"translate-x-0 -translate-y-full translate-z-0 mask-active"}:e.position==="bottom"?{enterFromClass:"translate-x-0 translate-y-full translate-z-0 mask-active",leaveToClass:"translate-x-0 translate-y-full translate-z-0 mask-active"}:e.position==="left"?{enterFromClass:"-translate-x-full translate-y-0 translate-z-0 mask-active",leaveToClass:"-translate-x-full translate-y-0 translate-z-0 mask-active"}:e.position==="right"?{enterFromClass:"translate-x-full translate-y-0 translate-z-0 mask-active",leaveToClass:"translate-x-full translate-y-0 translate-z-0 mask-active"}:{enterFromClass:"opacity-0 mask-active",enterActiveClass:"transition-opacity duration-400 ease-in",leaveActiveClass:"transition-opacity duration-400 ease-in",leaveToClass:"opacity-0 mask-active"}
+    },
+    dataview: {
+        content: {
+            class: ["p-0", "border-0", "text-surface-700 dark:text-white/80", "bg-surface-0 dark:bg-surface-800"]
+        },
+        grid: {
+            class: ["flex flex-wrap", "ml-0 mr-0 mt-0", "bg-surface-0 dark:bg-surface-800"]
+        },
+        header: {
+            class: ["font-semibold", "p-6", "text-surface-800 dark:text-white/80", "bg-surface-0 dark:bg-surface-800", "border-surface-200 dark:border-surface-700 border-b"]
+        }
+    },
+    accordion: {
+        accordiontab: {
+            header: ({props:e})=>({class:["pt-6 pb-0","mt-6","border-x-0 border-b-0","border border-surface-200 dark:border-surface-700",{"select-none pointer-events-none cursor-default opacity-60":e==null?void 0:e.disabled}]}),
+            headerAction: ({context:e})=>({class:["font-semibold","leading-7","flex items-center justify-between flex-row-reverse","relative","rounded-md","bg-transparent","text-surface-900 dark:text-surface-0","focus:outline-none focus:outline-offset-0 focus-visible:ring-2 focus-visible:ring-primary-600 ring-inset dark:focus-visible:ring-primary-500","cursor-pointer no-underline select-none"]}),
+            headerIcon: {
+                class: "inline-block ml-2"
+            },
+            headerTitle: {
+                class: "leading-7"
+            },
+            content: {
+                class: ["leading-7", "pr-12 pt-2", "text-surface-600 dark:text-surface-0/70"]
+            },
+            transition: {
+                enterFromClass: "max-h-0",
+                enterActiveClass: "overflow-hidden transition-[max-height] duration-1000 ease-[cubic-bezier(0.42,0,0.58,1)]",
+                enterToClass: "max-h-[1000px]",
+                leaveFromClass: "max-h-[1000px]",
+                leaveActiveClass: "overflow-hidden transition-[max-height] duration-[450ms] ease-[cubic-bezier(0,1,0,1)]",
+                leaveToClass: "max-h-0"
+            }
+        }
+    },
+    tabmenu: {
+        root: {
+            class: "overflow-x-auto"
+        },
+        menu: {
+            class: ["flex flex-1", "list-none", "p-0 m-0", "bg-surface-0 dark:bg-surface-800", "border-b border-surface-200 dark:border-surface-700", "text-surface-900 dark:text-surface-0/80"]
+        },
+        menuitem: {
+            class: "mr-0"
+        },
+        action: ({context:e,state:r})=>({class:["relative","font-medium","text-md","flex items-center","py-4 px-3","-mb-[1px]","border-b-2","rounded-t-md",{"border-surface-200 dark:border-surface-700":r.d_activeIndex!==e.index,"bg-surface-0 dark:bg-surface-800":r.d_activeIndex!==e.index,"text-surface-700 dark:text-surface-0/80":r.d_activeIndex!==e.index,"bg-surface-0 dark:bg-surface-800":r.d_activeIndex===e.index,"border-primary-500 dark:border-primary-400":r.d_activeIndex===e.index,"text-primary-500 dark:text-primary-400":r.d_activeIndex===e.index},"focus-visible:outline-none focus-visible:outline-offset-0 focus-visible:ring-2 focus-visible:ring-inset","focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400",{"hover:bg-surface-0 dark:hover:bg-surface-800/80":r.d_activeIndex!==e.index,"hover:border-surface-400 dark:hover:border-surface-600":r.d_activeIndex!==e.index,"hover:text-surface-900 dark:hover:text-surface-0":r.d_activeIndex!==e.index},"transition-all duration-200","cursor-pointer select-none text-decoration-none","overflow-hidden","user-select-none","whitespace-nowrap"]}),
+        icon: {
+            class: "mr-2"
+        }
+    },
+
+    tabview: {
+        navContainer: ({props:e})=>({class:["relative",{"overflow-hidden":e.scrollable}]}),
+        navContent: {
+            class: ["overflow-y-hidden overscroll-contain", "overscroll-auto", "scroll-smooth", "[&::-webkit-scrollbar]:hidden"]
+        },
+        previousButton: {
+            class: ["flex items-center justify-center", "!absolute", "top-0 left-0", "z-20", "h-full w-12", "rounded-none", "bg-surface-0 dark:bg-surface-800", "text-primary-500 dark:text-primary-400", "shadow-md"]
+        },
+        nextButton: {
+            class: ["flex items-center justify-center", "!absolute", "top-0 right-0", "z-20", "h-full w-12", "rounded-none", "bg-surface-0 dark:bg-surface-800", "text-primary-500 dark:text-primary-400", "shadow-md"]
+        },
+        nav: {
+            class: ["flex flex-1", "list-none", "p-0 m-0", "bg-surface-0 dark:bg-surface-800", "border-b border-surface-200 dark:border-surface-700", "text-surface-900 dark:text-surface-0/80"]
+        },
+        tabpanel: {
+            header: ({props:e})=>({class:["mr-0",{"opacity-60 cursor-default user-select-none select-none pointer-events-none":e==null?void 0:e.disabled}]}),
+            headerAction: ({parent:e,context:r})=>({class:["relative","font-medium","text-md","flex items-center","py-4 px-3","-mb-[1px]","border-b-2","rounded-t-md",{"border-surface-200 dark:border-surface-700":e.state.d_activeIndex!==r.index,"bg-surface-0 dark:bg-surface-800":e.state.d_activeIndex!==r.index,"text-surface-700 dark:text-surface-0/80":e.state.d_activeIndex!==r.index,"bg-surface-0 dark:bg-surface-800":e.state.d_activeIndex===r.index,"border-primary-500 dark:border-primary-400":e.state.d_activeIndex===r.index,"text-primary-500 dark:text-primary-400":e.state.d_activeIndex===r.index},"focus-visible:outline-none focus-visible:outline-offset-0 focus-visible:ring-2 focus-visible:ring-inset","focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400",{"hover:bg-surface-0 dark:hover:bg-surface-800/80":e.state.d_activeIndex!==r.index,"hover:border-surface-400 dark:hover:border-surface-600":e.state.d_activeIndex!==r.index,"hover:text-surface-900 dark:hover:text-surface-0":e.state.d_activeIndex!==r.index},"transition-all duration-200","cursor-pointer select-none text-decoration-none","overflow-hidden","user-select-none","whitespace-nowrap"]}),
+            headerTitle: {
+                class: ["leading-none", "whitespace-nowrap"]
+            },
+            content: {
+                class: ["p-6", "rounded-b-md", "bg-surface-0 dark:bg-surface-800", "text-surface-700 dark:text-surface-0/80", "border-0"]
+            }
+        }
+    },
+
 }
 
 export default MyDesignSystem;
