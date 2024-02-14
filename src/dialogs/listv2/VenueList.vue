@@ -34,7 +34,7 @@ const goToLocation = (location: any) => {
 
 <template>
   <sidebar v-model:visible="sidebarVisible" header="Venues" position="right"
-           class="w-full">
+           class="w-full" :pt="{title: {class: 'text-white dark:text-black'}, closeIcon: {class:'text-white dark:text-black'}}">
     <DataView :value="locationData" data-key="id">
       <template #list="slotProps">
         <div class="grid grid-nogutter divide-y divide-blue-200">

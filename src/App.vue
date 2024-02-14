@@ -108,9 +108,7 @@ const goToLocationOnMap = (location: any) => {
 
 <template>
   <div class="flex h-screen">
-    <Dialog v-if="meta" v-model:visible="open" modal :style="{ width: '55rem', 'background-color': levelColour(meta.level), 'max-height': '90vh', 'overflow-y': 'auto' }" :pt="{
-        closeButton: { style: `color:${meta.level === 'Blue' ? 'white' : ''}` }
-      }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <Dialog v-if="meta" v-model:visible="open" modal :style="{ width: '55rem', 'background-color': levelColour(meta.level), 'max-height': '90vh', 'overflow-y': 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       <template #header>
         <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="text-3xl dark:text-white">{{meta.name}}</p>
       </template>
