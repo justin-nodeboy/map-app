@@ -8,15 +8,11 @@ import {useVenueList} from "@/composables/useVenueList";
 import VenueList from "@/dialogs/listv2/VenueList.vue";
 
 const open = ref(false);
-const listOpen = ref(false);
 const wizardOpen = ref(false);
-const openImage = ref(false);
 const map = ref();
 const markerGroup = ref();
 const locationData = ref<any[]>([]);
 const meta = ref();
-const activeImage = ref();
-const categories = ref<any[]>([]);
 const {sidebarVisible, levelColour} = useVenueList();
 const op = ref();
 const active = ref(0);
@@ -73,8 +69,8 @@ onMounted(async() => {
 
   legend.addTo(map.value);
 
-  //locationData.value = await fetch("https://admin.bluebillboard.co.uk/api/public/venues").then(res => res.json());
-  locationData.value = await fetch("http://localhost:5055/api/public/venues").then(res => res.json());
+  locationData.value = await fetch("https://admin.bluebillboard.co.uk/api/public/venues").then(res => res.json());
+  //locationData.value = await fetch("http://localhost:5055/api/public/venues").then(res => res.json());
   processLocationData();
 
   setTimeout(function () {
