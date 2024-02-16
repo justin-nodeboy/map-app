@@ -433,7 +433,7 @@ watch(active, (newValue) => {
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="openSavedSearch" modal header="Load your saved quote" :style="{ width: '30rem' }"
+  <Dialog v-model:visible="openSavedSearch" modal header="Load your saved quote" :style="{ width: '30rem', 'background-color': 'white' }"
           style="max-height: 40vh; overflow-y: auto;" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <div>
       <label class="leading-7 text-gray-900 dark:text-white sm:truncate text-xl sm:tracking-tight block"
