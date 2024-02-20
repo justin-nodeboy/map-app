@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref, watch} from "vue";
-import { FilterMatchMode } from 'primevue/api';
+import {FilterMatchMode} from 'primevue/api';
 import {useToast} from "primevue/usetoast";
 
 interface SelectedVenues {
@@ -299,8 +299,11 @@ watch(active, (newValue) => {
     <div>
       <Steps v-model:activeStep="active" :model="items" :readonly="false" class="cursor-pointer" />
       <Card v-if="active === 0">
-        <template #title> Choose your venues
-          <Button icon="pi pi-eye" class="float-right" @click="openSavedSearch = true" label="Load saved quotes" />
+        <template #title>
+          <div class="flex justify-between items-center">
+            <span>Choose Venues</span>
+            <Button icon="pi pi-eye" @click="openSavedSearch = true" label="Load saved quotes" />
+          </div>
         </template>
         <template #content>
           <DataTable :value="venues"
@@ -313,7 +316,7 @@ watch(active, (newValue) => {
               <div class="flex w-full">
                     <span class="p-input-icon-left w-full">
                         <i class="pi pi-search" />
-                        <InputText class="ml-2 w-3/4" v-model="filters['global'].value" placeholder="Search (Name, Type or Location)" />
+                        <InputText class="ml-2 w-4/5" v-model="filters['global'].value" placeholder="Search (Name, Type or Location)" />
                     </span>
               </div>
             </template>
@@ -390,20 +393,22 @@ watch(active, (newValue) => {
       <Card v-if="active === 2">
         <template #title> Quote</template>
         <template #content>
-          <div class="flex justify-center items-center mt-10">
-            <div v-for="(plan, index) in plans" :key="index" class="w-1/3 mx-4">
-              <div class="bg-white shadow-md rounded-lg p-6 dark:bg-gray-900">
-                <h2 class="text-2xl font-semibold mb-4">{{ plan.name }}</h2>
-                <p class="text-gray-600 mb-4 dark:text-white">{{ plan.description }}</p>
-                <div class="flex items-center justify-center mb-4">
-                  <span class="text-4xl font-semibold">£{{ plan.price.toFixed(2) }}</span>
-                  <span class="text-gray-600 ml-2 dark:text-white">/month + VAT</span>
-                </div>
-                <ul class="text-gray-600 dark:text-white">
-                  <li class="mb-2">{{ plan.feature1 }}</li>
-                  <li v-for="(f, i) in plan.features" class="mb-2" :key="i">{{ f }}</li>
-                </ul>
-              </div>
+          <div class="grid sm:grid-cols-1 lg:grid-cols-3 mt-10">
+            <div v-for="(plan, index) in plans" :key="index" class="mx-3">
+              <Card>
+                <template #title> {{plan.name}}</template>
+                <template #content>
+                  <p class="text-gray-600 mb-4 dark:text-white">{{ plan.description }}</p>
+                  <div class="flex items-center justify-center mb-4">
+                    <span class="text-4xl font-semibold">£{{ plan.price.toFixed(2) }}</span>
+                    <span class="text-gray-600 ml-2 dark:text-white">/month + VAT</span>
+                  </div>
+                  <ul class="text-gray-600 dark:text-white">
+                    <li class="mb-2">{{ plan.feature1 }}</li>
+                    <li v-for="(f, i) in plan.features" class="mb-2" :key="i">{{ f }}</li>
+                  </ul>
+                </template>
+              </Card>
             </div>
           </div>
           <div class="flex items-center mt-2">
