@@ -129,12 +129,17 @@ const resetCalculations = () => {
 const calculateQuote = () => {
   resetCalculations();
   let totalDiscount = 0;
+  let totalImpressionsPerMonth = 0;
+  let totalImpressionsPerFortnight = 0;
   selectedVenues.value?.selected.forEach((venue: any) => {
     if (venue.isRatePerScreen) {
       totalRate.value += venue.rate * venue.screenCount - 50;
     } else {
       totalRate.value += venue.rate;
     }
+    // Sum impressions
+    totalImpressionsPerMonth += venue.impressionsPerMonth;
+    totalImpressionsPerFortnight += venue.impressionsPerFortnight;
   });
 
   // Apply Discounts
@@ -180,6 +185,14 @@ const calculateQuote = () => {
     plans.value[1].features.push("Includes Multi Month discount of 10%");
     plans.value[2].features.push("Includes Multi Month discount of 10%");
   }
+  // Apply Impressions
+  plans.value[0].features.push(`Total Impressions Per Month: ${(2.5 / 100) * totalImpressionsPerMonth}`);
+  plans.value[1].features.push(`Total Impressions Per Month: ${(5 / 100) * totalImpressionsPerMonth}`);
+  plans.value[2].features.push(`Total Impressions Per Month: ${(10 / 100) * totalImpressionsPerMonth}`);
+
+  plans.value[0].features.push(`Total Impressions Per Fortnight: ${(2.5 / 100) * totalImpressionsPerFortnight}`);
+  plans.value[1].features.push(`Total Impressions Per Fortnight: ${(5 / 100) * totalImpressionsPerFortnight}`);
+  plans.value[2].features.push(`Total Impressions Per Fortnight: ${(10 / 100) * totalImpressionsPerFortnight}`);
 
   applyDiscount(totalDiscount);
   plans.value[0].price = totalRate.value;
