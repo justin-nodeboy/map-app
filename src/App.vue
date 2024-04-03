@@ -116,9 +116,9 @@ const goToLocationOnMap = (location: any) => {
       <div class="flex align-items-center gap-3">
         <p class="w-6rem dark:text-white" :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">{{meta.description}}</p>
       </div>
-      <div class="flex align-items-center gap-3 mt-2">
-        <p class="w-6rem dark:text-white" :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">Prices start from: £{{meta.isRatePerScreen ? `${(meta.rate * meta.screenCount) - 50}` : `${meta.rate}`}}/month + VAT</p>
-      </div>
+<!--      <div class="flex align-items-center gap-3 mt-2">-->
+<!--        <p class="w-6rem dark:text-white" :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">Prices start from: £{{meta.isRatePerScreen ? `${(meta.rate * meta.screenCount) - 50}` : `${meta.rate}`}}/month + VAT</p>-->
+<!--      </div>-->
       <div class="flex gap-3 mb-3 w-full">
         <Accordion class="w-full">
           <AccordionTab :pt="{

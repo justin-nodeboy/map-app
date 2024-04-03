@@ -58,11 +58,11 @@ const goToLocation = (location: any) => {
                   </div>
                 </div>
                 <div class="flex sm:flex-col items-center sm:items-end">
-                  <span class="text-xl font-semibold text-900"
-                        :style="`color:${item.level === 'Blue' ? 'white' : 'black'}`">
-                    from £{{item.isRatePerScreen ? `${(item.rate * item.screenCount) - 50}`: `${item.rate}`}}/month
-                  </span>
-                  <span class="font-medium text-secondary text-sm" :style="`color:${item.level === 'Blue' ? 'white' : 'black'}`">+ VAT</span>
+<!--                  <span class="text-xl font-semibold text-900"-->
+<!--                        :style="`color:${item.level === 'Blue' ? 'white' : 'black'}`">-->
+<!--                    from £{{item.isRatePerScreen ? `${(item.rate * item.screenCount) - 50}`: `${item.rate}`}}/month-->
+<!--                  </span>-->
+<!--                  <span class="font-medium text-secondary text-sm" :style="`color:${item.level === 'Blue' ? 'white' : 'black'}`">+ VAT</span>-->
                   <div class="flex gap-2 mt-2">
                     <Button style="'background-color: #0d47a1'" size="small" @click="goToLocation(item.location)" icon="pi pi-eye" rounded></Button>
                   </div>
