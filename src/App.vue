@@ -12,16 +12,9 @@ const wizardOpen = ref(false);
 const map = ref();
 const markerGroup = ref();
 const locationData = ref<any[]>([]);
+const displayGroups = ref<any[]>([]);
 const meta = ref();
 const {sidebarVisible, levelColour} = useVenueList();
-const op = ref();
-const active = ref(0);
-
-const items = ref([
-  { label: 'Starter', icon: 'pi pi-home' },
-  { label: 'Optimal', icon: 'pi pi-chart-line' },
-  { label: 'Enhanced', icon: 'pi pi-list' }
-]);
 
 const levels = ["Blue", "Gold", "Platinum"];
 
@@ -70,6 +63,8 @@ onMounted(async() => {
   legend.addTo(map.value);
 
   locationData.value = await fetch("https://admin.bluebillboard.co.uk/api/public/venues").then(res => res.json());
+  displayGroups.value = await fetch("https://admin.bluebillboard.co.uk/api/public/groups").then(res => res.json());
+  //displayGroups.value = await fetch("http://localhost:5055/api/public/groups").then(res => res.json());
   //locationData.value = await fetch("http://localhost:5055/api/public/venues").then(res => res.json());
   processLocationData();
 
@@ -143,7 +138,7 @@ const goToLocationOnMap = (location: any) => {
       </div>
     </Dialog>
 
-    <wizard-view :open-wizard="wizardOpen" :venues="locationData" @close-wizard="wizardOpen = false" />
+    <wizard-view :open-wizard="wizardOpen" :venues="locationData" :display-groups="displayGroups" @close-wizard="wizardOpen = false" />
     <venue-list :location-data="locationData" @set-location="goToLocationOnMap" />
     <div id="map" >
 

@@ -27,10 +27,12 @@ const openSavedSearch = ref<boolean>(false);
 const savedQuotes = ref<any[]>([]);
 const loadQuote = ref<any>();
 const name = ref<string>("");
+const displayGroup = ref<string>("");
 const totalRate = ref(0);
 const op = ref();
 const filters = ref({
-  global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  id: { value: null, matchMode: FilterMatchMode.IN },
 });
 
 const props = defineProps({
@@ -39,6 +41,10 @@ const props = defineProps({
     required: true
   },
   venues: {
+    type: Array<any>,
+    required: true
+  },
+  displayGroups: {
     type: Array<any>,
     required: true
   }
@@ -304,6 +310,12 @@ watch(active, (newValue) => {
     calculateQuote();
   }
 });
+
+watch(displayGroup, (newValue) => {
+  if (newValue) {
+    filters.value['id'].value = props.displayGroups.find((d: any) => d.id === newValue).venueIds;
+  }
+});
 </script>
 
 <template>
@@ -329,7 +341,8 @@ watch(active, (newValue) => {
               <div class="flex w-full">
                     <span class="p-input-icon-left w-full">
                         <i class="pi pi-search" />
-                        <InputText class="ml-2 w-4/5" v-model="filters['global'].value" placeholder="Search (Name, Type or Location)" />
+                        <InputText class="ml-2 w-2/4" v-model="filters['global'].value" placeholder="Search (Name, Type or Location)" />
+                        <Dropdown v-model="displayGroup" :options="props.displayGroups" class="w-2/4 ml-2" option-label="name" option-value="id" placeholder="Or select a group" />
                     </span>
               </div>
             </template>
