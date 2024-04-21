@@ -342,7 +342,7 @@ watch(displayGroup, (newValue) => {
                     <span class="p-input-icon-left w-full">
                         <i class="pi pi-search" />
                         <InputText class="ml-2 w-2/4" v-model="filters['global'].value" placeholder="Search (Name, Type or Location)" />
-                        <Dropdown v-model="displayGroup" :options="props.displayGroups" class="w-2/4 ml-2" option-label="name" option-value="id" placeholder="Or select a group" />
+                        <Dropdown showClear v-model="displayGroup" :options="props.displayGroups" class="w-2/4 ml-2" option-label="name" option-value="id" placeholder="Or select a group" />
                     </span>
               </div>
             </template>
