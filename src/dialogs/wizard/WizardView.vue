@@ -314,6 +314,8 @@ watch(active, (newValue) => {
 watch(displayGroup, (newValue) => {
   if (newValue) {
     filters.value['id'].value = props.displayGroups.find((d: any) => d.id === newValue).venueIds;
+  } else {
+    filters.value['id'].value = null;
   }
 });
 </script>
