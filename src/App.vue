@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import {ref, onMounted} from "vue";
 import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -15,10 +15,16 @@ const locationData = ref<any[]>([]);
 const displayGroups = ref<any[]>([]);
 const meta = ref();
 const {sidebarVisible, levelColour} = useVenueList();
+const isStripped = ref(false);
 
 const levels = ["Blue", "Gold", "Platinum"];
 
-onMounted(async() => {
+onMounted(async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('stripped') === 'true') {
+    isStripped.value = true;
+  }
+
   map.value = L.map('map').setView([50.9885170505752, -0.1969095226736214], 11);
   markerGroup.value = L.layerGroup().addTo(map.value);
 
@@ -103,18 +109,32 @@ const goToLocationOnMap = (location: any) => {
 
 <template>
   <div class="flex h-screen">
-    <Dialog v-if="meta" v-model:visible="open" modal :style="{ width: '55rem', 'background-color': levelColour(meta.level), 'max-height': '90vh', 'overflow-y': 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <Dialog v-if="meta" v-model:visible="open" modal
+            :style="{ width: '55rem', 'background-color': levelColour(meta.level), 'max-height': '90vh', 'overflow-y': 'auto' }"
+            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       <template #header>
-        <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="text-3xl dark:text-white">{{meta.name}}</p>
+        <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`"
+           class="text-3xl dark:text-white">{{ meta.name }}</p>
       </template>
-      <span class="font-semibold block mb-5 dark:text-white" :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">Part of our {{meta.level}} collection</span>
-      <div class="flex align-items-center gap-3">
-        <p class="w-6rem dark:text-white" :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">{{meta.description}}</p>
+      <span class="font-semibold block mb-5 dark:text-white"
+            :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">Part of our {{ meta.level }} collection</span>
+      <div class="flex align-items-center gap-3" v-if="!isStripped">
+        <p class="w-6rem dark:text-white"
+           :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">{{ meta.description }}</p>
       </div>
-<!--      <div class="flex align-items-center gap-3 mt-2">-->
-<!--        <p class="w-6rem dark:text-white" :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">Prices start from: £{{meta.isRatePerScreen ? `${(meta.rate * meta.screenCount) - 50}` : `${meta.rate}`}}/month + VAT</p>-->
-<!--      </div>-->
-      <div class="flex gap-3 mb-3 w-full">
+
+      <div v-if="isStripped">
+        <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`"
+           class="dark:text-white">City: {{ meta.city }}</p>
+        <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`"
+           class="mt-2 dark:text-white">Type: {{ meta.type }}</p>
+        <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`"
+           class="mt-2 dark:text-white">Footfall (Monthly): {{ meta.footfallPerMonth.toLocaleString() }}</p>
+        <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`"
+           class="mt-2 dark:text-white">Screens: {{ meta.screenCount }}</p>
+      </div>
+
+      <div v-if="!isStripped" class="flex gap-3 mb-3 w-full">
         <Accordion class="w-full">
           <AccordionTab :pt="{
         headerIcon: { style: `color:${meta.level === 'Blue' ? 'white' : ''}` }
@@ -123,29 +143,39 @@ const goToLocationOnMap = (location: any) => {
               <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`">More info</p>
             </template>
             <template #default>
-              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="dark:text-white">City: {{meta.city}}</p>
-              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="mt-2 dark:text-white">Type: {{meta.type}}</p>
-              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="mt-2 dark:text-white">Footfall (Monthly): {{meta.footfallPerMonth.toLocaleString()}}</p>
-              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`" class="mt-2 dark:text-white">Screens: {{meta.screenCount}}</p>
+              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`"
+                 class="dark:text-white">City: {{ meta.city }}</p>
+              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`"
+                 class="mt-2 dark:text-white">Type: {{ meta.type }}</p>
+              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`"
+                 class="mt-2 dark:text-white">Footfall (Monthly): {{ meta.footfallPerMonth.toLocaleString() }}</p>
+              <p :class="`${meta.level === 'Blue' ? 'text-white' : 'text-black dark:text-white'}`"
+                 class="mt-2 dark:text-white">Screens: {{ meta.screenCount }}</p>
 
             </template>
 
           </AccordionTab>
         </Accordion>
       </div>
-      <div class="flex gap-3 mb-5">
-        <img class="max-h-3/4 w-full object-cover" :src="`https://admin.bluebillboard.co.uk/images/locations/${meta.image}`" alt="" />
+      <div v-if="!isStripped" class="flex gap-3 mb-5">
+        <img class="max-h-3/4 w-full object-cover"
+             :src="`https://admin.bluebillboard.co.uk/images/locations/${meta.image}`" alt=""/>
       </div>
     </Dialog>
 
-    <wizard-view :open-wizard="wizardOpen" :venues="locationData" :display-groups="displayGroups" @close-wizard="wizardOpen = false" />
-    <venue-list :location-data="locationData" @set-location="goToLocationOnMap" />
-    <div id="map" >
+    <wizard-view :open-wizard="wizardOpen" :venues="locationData" :display-groups="displayGroups"
+                 @close-wizard="wizardOpen = false"/>
+    <venue-list :location-data="locationData" @set-location="goToLocationOnMap"/>
+    <div id="map">
 
     </div>
-    <button @click="wizardOpen = true" id="quoteButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Get Quote</button>
-    <button @click="sidebarVisible = true" id="listButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View List</button>
-    <toast />
+    <button v-if="!isStripped" @click="wizardOpen = true" id="quoteButton"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Get Quote
+    </button>
+    <button v-if="!isStripped" @click="sidebarVisible = true" id="listButton"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View List
+    </button>
+    <toast/>
   </div>
 </template>
 
@@ -172,7 +202,7 @@ const goToLocationOnMap = (location: any) => {
 
 @media (prefers-color-scheme: dark) {
   .map-tiles {
-    filter:var(--map-tiles-filter, none);
+    filter: var(--map-tiles-filter, none);
   }
 }
 
@@ -180,6 +210,7 @@ const goToLocationOnMap = (location: any) => {
   line-height: 18px;
   color: #555;
 }
+
 .legend i {
   width: 100%;
   height: 18px;
@@ -192,10 +223,11 @@ const goToLocationOnMap = (location: any) => {
   padding: 6px 8px;
   font: 14px/16px Arial, Helvetica, sans-serif;
   background: white;
-  background: rgba(255,255,255,0.8);
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
 }
+
 .info h4 {
   margin: 0 0 5px;
   color: #777;
