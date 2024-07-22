@@ -203,7 +203,7 @@ const calculateQuote = () => {
   applyDiscount(totalDiscount);
   plans.value[0].price = totalRate.value;
   plans.value[1].price = totalRate.value * 1.8;
-  plans.value[2].price = totalRate.value * 3.8;
+  plans.value[2].price = totalRate.value * 3.5;
 };
 
 const applyDiscount = (discount: number) => {
