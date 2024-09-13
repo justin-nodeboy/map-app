@@ -19,13 +19,23 @@ const isStripped = ref(false);
 
 const levels = ["Blue", "Gold", "Platinum"];
 
+let lat = 50.9885170505752;
+let lng = -0.1969095226736214;
+let zoomLevel = 11;
+
 onMounted(async () => {
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('stripped') === 'true') {
     isStripped.value = true;
   }
 
-  map.value = L.map('map').setView([50.9885170505752, -0.1969095226736214], 11);
+  if (urlParams.get('lat') && urlParams.get('lng')) {
+    lat = parseFloat(urlParams.get('lat')!);
+    lng = parseFloat(urlParams.get('lng')!);
+    zoomLevel = 14;
+  }
+
+  map.value = L.map('map').setView([lat, lng], zoomLevel);
   markerGroup.value = L.layerGroup().addTo(map.value);
 
   let mapSource = "https://b.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
