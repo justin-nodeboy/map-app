@@ -42,7 +42,7 @@ const goToLocation = (location: any) => {
             <div class="flex flex-col sm:flex-row justify-between items-center xl:items-start flex-1 gap-4 p-3" :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }"
                  :style="`background-color:${levelColour(item.level)}`">
               <div class="relative">
-                <avatar :image="`https://admin.bluebillboard.co.uk/images/locations/${item.image}`"
+                <avatar :image="`${item.image}`"
                         size="xlarge"
                         shape="circle"
                         class="block"

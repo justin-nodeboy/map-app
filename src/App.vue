@@ -169,7 +169,7 @@ const goToLocationOnMap = (location: any) => {
       </div>
       <div v-if="!isStripped" class="flex gap-3 mb-5">
         <img class="max-h-3/4 w-full object-cover"
-             :src="`https://admin.bluebillboard.co.uk/images/locations/${meta.image}`" alt=""/>
+             :src="`${meta.image}`" alt=""/>
       </div>
     </Dialog>
 

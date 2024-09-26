@@ -350,7 +350,7 @@ watch(displayGroup, (newValue) => {
             </template>
             <Column header="Image">
               <template #body="slotProps">
-                <img :src="`https://admin.bluebillboard.co.uk/images/locations/${slotProps.data.image}`" :alt="slotProps.data.image"
+                <img :src="`${slotProps.data.image}`" :alt="slotProps.data.image"
                      class="w-20 shadow-2 border-round object-contain"/>
               </template>
             </Column>
