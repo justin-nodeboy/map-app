@@ -21,7 +21,7 @@ const levels = ["Blue", "Gold", "Platinum"];
 
 let lat = 50.9885170505752;
 let lng = -0.1969095226736214;
-let zoomLevel = 11;
+let zoomLevel = 10;
 
 onMounted(async () => {
   const urlParams = new URLSearchParams(window.location.search);
